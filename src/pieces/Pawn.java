@@ -90,10 +90,6 @@ public class Pawn implements Piece{
 
     @Override
     public String toString() {
-        if (colour==Colour.BLACK){
-            return "\u265F";
-        } else {
-            return "\u2659";
-        }
+        return "\u2659";
     }
 }

@@ -1,11 +1,9 @@
 package board;
 
-
 import helper.Colour;
 import helper.Input;
 import helper.Position;
 import pieces.*;
-
 import java.util.*;
 
 public class Board {
@@ -656,20 +654,29 @@ public class Board {
     public void printChessBoard(){
         for (int i = 0; i < chessBoard.length; i++) {
             for (int j = 0; j < chessBoard.length; j++) {
-                if ((i+j)%2==0 && chessBoard[i][j]!=null){
-                    System.out.printf("\033[44m%4s\033[0m", chessBoard[i][j]);
+                Piece piece = chessBoard[i][j];
+                if ((i+j)%2==0 && piece!=null){
+                    if (piece.getColour() == Colour.BLACK){
+                        System.out.printf("\u001B[31m\u001B[46m %s \u001B[0m", chessBoard[i][j]);
+                    } else {
+                        System.out.printf("\u001B[47m\u001B[46m %s \u001B[0m", chessBoard[i][j]);
+                    }
                 } else if ((i+j)%2==0){
-                    System.out.printf("\033[44m%4s\033[0m", "     ");
-                } else if ((i+j)%2!=0 && chessBoard[i][j]!=null) {
-                    System.out.printf("\033[47m%4s\033[0m", chessBoard[i][j]);
+                    System.out.printf("\u001B[36m\u001B[46m %s \u001B[0m", "\u2659");
+                } else if ((i+j)%2!=0 && piece!=null) {
+                    if (piece.getColour() == Colour.BLACK){
+                        System.out.printf("\u001B[31m\u001B[40m %s \u001B[0m", chessBoard[i][j]);
+                    } else {
+                        System.out.printf("\u001B[37m\u001B[40m %s \u001B[0m", chessBoard[i][j]);
+                    }
                 } else if ((i+j)%2!=0) {
-                    System.out.printf("\033[47m%4s\033[0m", "     ");
+                    System.out.printf("\u001B[30m\u001B[40m %s \u001B[0m", "\u2659");
                 }
             }
             System.out.println();
         }
-        System.out.println();
-        System.out.println(whites);
-        System.out.println(blacks);
+        System.out.println("White pieces removed: " + whites);
+        System.out.println("Red pieces removed: " + blacks);
+        System.out.println("-----------------------------");
     }
 }

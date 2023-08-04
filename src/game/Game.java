@@ -22,7 +22,7 @@ public class Game {
         this.player1 = new HumanPlayer(Colour.WHITE);
         this.player2 = new HumanPlayer(Colour.BLACK);
         whiteHistory = new StringBuilder("White`s moves:\n");
-        blackHistory = new StringBuilder("Black`s moves:\n");
+        blackHistory = new StringBuilder("Red`s moves:\n");
     }
 
     public void run() {
@@ -32,7 +32,7 @@ public class Game {
             if (isWhite){
                 System.out.println("White`s turn to move.");
             } else {
-                System.out.println("Black`s turn to move.");
+                System.out.println("Red`s turn to move.");
             }
             Position from = current.move();
             Position to = current.move();
@@ -49,7 +49,7 @@ public class Game {
         }
         try {
             SaveFile.getInstance().print("white", whiteHistory);
-            SaveFile.getInstance().print("black", blackHistory);
+            SaveFile.getInstance().print("red", blackHistory);
         } catch (IOException e) {
             System.out.println("Cannot print players moves.");
         }
