@@ -25,33 +25,17 @@ public class Knight implements Piece{
     @Override
     public boolean checkIfCanMove(Position toPosition) {
         if(Piece.super.isValid(toPosition)){
-            if (Board.getPiece(this.position).getColour()==Colour.BLACK) {
-                if ((Math.abs(this.position.getY() - toPosition.getY()) == 2) && (Math.abs(this.position.getX() - toPosition.getX()) == 1)) {
-                    if (Board.getPiece(toPosition)!=null && Board.getPiece(toPosition).getColour()==Colour.WHITE){
-                        return true;
-                    } else if (Board.getPiece(toPosition)==null) {
-                        return true;
-                    }
-                } else if ((Math.abs(this.position.getX() - toPosition.getX()) == 2) && (Math.abs(this.position.getY() - toPosition.getY()) == 1)) {
-                    if (Board.getPiece(toPosition)!=null && Board.getPiece(toPosition).getColour()==Colour.WHITE){
-                        return true;
-                    } else if (Board.getPiece(toPosition)==null) {
-                        return true;
-                    }
+            if ((Math.abs(this.position.getY() - toPosition.getY()) == 2) && (Math.abs(this.position.getX() - toPosition.getX()) == 1)) {
+                if (Board.getPiece(toPosition)!=null && Board.getPiece(toPosition).getColour()!=this.colour){
+                    return true;
+                } else if (Board.getPiece(toPosition)==null) {
+                    return true;
                 }
-            } else {
-                if ((Math.abs(this.position.getY() - toPosition.getY()) == 2) && (Math.abs(this.position.getX() - toPosition.getX()) == 1)) {
-                    if (Board.getPiece(toPosition)!=null && Board.getPiece(toPosition).getColour()==Colour.BLACK){
-                        return true;
-                    } else if (Board.getPiece(toPosition)==null) {
-                        return true;
-                    }
-                } else if ((Math.abs(this.position.getX() - toPosition.getX()) == 2) && (Math.abs(this.position.getY() - toPosition.getY()) == 1)) {
-                    if (Board.getPiece(toPosition)!=null && Board.getPiece(toPosition).getColour()==Colour.BLACK){
-                        return true;
-                    } else if (Board.getPiece(toPosition)==null) {
-                        return true;
-                    }
+            } else if ((Math.abs(this.position.getX() - toPosition.getX()) == 2) && (Math.abs(this.position.getY() - toPosition.getY()) == 1)) {
+                if (Board.getPiece(toPosition)!=null && Board.getPiece(toPosition).getColour()!=this.colour){
+                    return true;
+                } else if (Board.getPiece(toPosition)==null) {
+                    return true;
                 }
             }
         }
