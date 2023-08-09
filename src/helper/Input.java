@@ -20,12 +20,12 @@ public class Input {
     }
     public String getPosition(){
         String input = null;
-        while (scanner.hasNext()){
+        while (scanner.hasNextLine()){
             try {
                 input = scanner.nextLine();
                 break;
             } catch (InputMismatchException e){
-                System.out.println("Position's format must be like: 'x-y', where x and y are int primitives");
+                System.out.println("Only 'x-y' format is allowed, where 'x' and 'y' are int primitive type");
             }
         }
         return input;

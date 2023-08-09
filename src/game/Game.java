@@ -27,6 +27,8 @@ public class Game {
 
     public void run() {
         board.printChessBoard();
+        System.out.println("Good luck!");
+        System.out.println("Insert the position of the piece you want to move (allowed format is 'x-y')");
         while (!board.isEnd()){
             Player current = isWhite ? player1 : player2;
             if (isWhite){
