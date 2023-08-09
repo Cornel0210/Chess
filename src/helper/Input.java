@@ -18,21 +18,17 @@ public class Input {
         }
         return INSTANCE;
     }
-    public int getInt(){
-        int i=-1;
+    public String getPosition(){
+        String input = null;
         while (scanner.hasNext()){
             try {
-                i = scanner.nextInt();
+                input = scanner.nextLine();
                 break;
             } catch (InputMismatchException e){
-                System.out.println("insert a number between [0 and 7]");
-                scanner.nextLine();
-            }
-            finally {
-                scanner.nextLine();
+                System.out.println("Position's format must be like: 'x-y', where x and y are int primitives");
             }
         }
-        return i;
+        return input;
     }
 
     public String getPiece(){
@@ -43,7 +39,7 @@ public class Input {
                 break;
             } catch (InputMismatchException e){
                 System.out.println("Unrecognised piece. Try again!");
-                scanner.nextLine();
+                //scanner.nextLine();
             }
         }
         return input;

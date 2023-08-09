@@ -3,7 +3,6 @@ package player;
 import helper.Colour;
 import helper.Input;
 import helper.Position;
-import pieces.Piece;
 
 public class HumanPlayer extends Player{
 
@@ -13,13 +12,13 @@ public class HumanPlayer extends Player{
 
     @Override
     public Position move() {
-        int x = Input.getInstance().getInt();
-        int y = Input.getInstance().getInt();
-        while (x<0 || x>7 || y<0 || y>7) {
-            System.out.println("insert a number between [0 and 7]");
-            x = Input.getInstance().getInt();
-            y = Input.getInstance().getInt();
-        }
+        int x;
+        int y;
+        do {
+            String input = Input.getInstance().getPosition();
+            x = Integer.parseInt(input.substring(0,1));
+            y = Integer.parseInt(input.substring(2));
+        } while (x<0 || x>7 || y<0 || y>7);
         return new Position(x, y);
     }
 }
