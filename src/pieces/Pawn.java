@@ -15,6 +15,15 @@ public class Pawn implements Piece{
         this.position = position;
     }
 
+    /**
+     * This method checks if the selected Pawn can be moved to the chosen position.
+     * It checks if:
+     *  1) the destination position is two squares forward, the Pawn was never moved before and there are no other
+     *  pieces between its initial and final (inclusive) positions.
+     *  2) the destination position is one square forward and the square is not occupied by other piece.
+     *  3) the destination position is one square along forward diagonal, and it is occupied by an enemy piece.
+     * Return: true if the move can be performed, false otherwise.
+     */
     @Override
     public boolean checkIfCanMove(Position toPosition) {
         if(Piece.super.isValid(toPosition)){

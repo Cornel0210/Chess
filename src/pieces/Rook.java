@@ -15,6 +15,11 @@ public class Rook implements Piece{
         this.position = position;
     }
 
+    /**
+     * This method checks if the destination position is on the same row or column and there are no other pieces on the
+     * path. Moreover, it checks if the destination position is free or occupied by an enemy piece.
+     * Return: true if the Rook can be moved, false otherwise.
+     */
     @Override
     public boolean checkIfCanMove(Position toPosition) {
         if(Piece.super.isValid(toPosition)){
@@ -25,7 +30,8 @@ public class Rook implements Piece{
                             return false;
                         }
                     }
-                    if (Board.getPiece(toPosition)!=null && (Board.getPiece(this.position).getColour() == Board.getPiece(toPosition).getColour())){
+                    if (Board.getPiece(toPosition)!=null &&
+                            (Board.getPiece(this.position).getColour() == Board.getPiece(toPosition).getColour())){
                         return false;
                     } else {
                         return true;
@@ -36,7 +42,8 @@ public class Rook implements Piece{
                             return false;
                         }
                     }
-                    if (Board.getPiece(toPosition)!=null && (Board.getPiece(this.position).getColour() == Board.getPiece(toPosition).getColour())){
+                    if (Board.getPiece(toPosition)!=null &&
+                            (Board.getPiece(this.position).getColour() == Board.getPiece(toPosition).getColour())){
                         return false;
                     } else {
                         return true;
@@ -52,7 +59,8 @@ public class Rook implements Piece{
                                 return false;
                             }
                         }
-                        if (Board.getPiece(toPosition)!=null && (Board.getPiece(this.position).getColour() == Board.getPiece(toPosition).getColour())){
+                        if (Board.getPiece(toPosition)!=null &&
+                                (Board.getPiece(this.position).getColour() == Board.getPiece(toPosition).getColour())){
                             return false;
                         } else {
                             return true;
@@ -63,7 +71,8 @@ public class Rook implements Piece{
                                 return false;
                             }
                         }
-                        if (Board.getPiece(toPosition)!=null && (Board.getPiece(this.position).getColour() == Board.getPiece(toPosition).getColour())){
+                        if (Board.getPiece(toPosition)!=null &&
+                                (Board.getPiece(this.position).getColour() == Board.getPiece(toPosition).getColour())){
                             return false;
                         } else {
                             return true;

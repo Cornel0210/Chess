@@ -15,6 +15,13 @@ public class Queen implements Piece{
         this.position = position;
     }
 
+    /**
+     * This method checks if:
+     *  1) the destination position is on the same row or column and there are no intervening pieces,
+     *  2) the destination position is along the Queen's diagonal and there are no intervening pieces.
+     * Additionally, it checks if the destination position is free of occupied by a rival's piece.
+     * Return: true if the move can be performed, false otherwise.
+     */
     @Override
     public boolean checkIfCanMove(Position toPosition) {
         if(Piece.super.isValid(toPosition)){
@@ -22,7 +29,8 @@ public class Queen implements Piece{
             int fromY = this.position.getY();
             int toX = toPosition.getX();
             int toY = toPosition.getY();
-            if (Board.getPiece(toPosition)!=null && Board.getPiece(toPosition).getColour() == Board.getPiece(this.position).getColour()){
+            if (Board.getPiece(toPosition)!=null &&
+                    Board.getPiece(toPosition).getColour() == Board.getPiece(this.position).getColour()){
                 return false;
             } else if (fromX==toX && fromY == toY){
                 return false;

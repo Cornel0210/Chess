@@ -11,9 +11,17 @@ public class King implements Piece{
     private final Colour colour;
     private final String name;
     private Position position;
-    private boolean wasMoved = false; //track for castling
-    private final List<Piece> tempChecked;
-    private final List<Piece> lastChecked;
+    private boolean wasMoved = false; //variable used to update if the King was ever moved, situation in which
+                                    // this piece can't castle anymore.
+    private final List<Piece> tempChecked; //list used to check if an eventual move brings this King in check.
+    //eq.:  black King at pos: [6-1], black Rook at pos [6-3], white Queen at pos [6-7] and no other pieces on the sixth row.
+    //'tempChecked' will store the pieces that check the black King if the black Rook is moved.
+    private final List<Piece> lastChecked; //list used to store the pieces that bring this King in check.
+
+    /**
+     * 'movesForDraw' variable is used to keep track of the number of moves performed by each player after all pieces,
+     * except the King, were taken out by the opponent. If 27 moves were made, there will be automatically a draw.
+     */
     private int movesForDraw;
 
     public King(Colour colour, Position position) {
@@ -25,6 +33,12 @@ public class King implements Piece{
         movesForDraw = 0;
     }
 
+    /**
+     * This method checks if the destination position is not further away than one square from the initial position and
+     * if that position is free or occupied by an enemy piece.
+     * Also, this checks if at the destination square the King would be in check.
+     * Return: true if the King can be moved, false otherwise.
+     */
     @Override
     public boolean checkIfCanMove(Position toPosition) {
         if(isValid(toPosition)){
@@ -46,6 +60,10 @@ public class King implements Piece{
         return true;
     }
 
+    /**
+     * This method checks if the King is currently in check. Each opponent's piece that threatens this King is stored
+     * in 'lastChecked' list.
+     */
     public boolean isUnderCheck(){
         lastChecked.clear();
         boolean flag = isUnderCheck(this.position);
@@ -53,6 +71,16 @@ public class King implements Piece{
         return flag;
     }
 
+    /**
+     * This method checks if this King will be under check at a given position.
+     * It checks if:
+     *  1) on the same row or column there is an opponent's Rook or Queen, or if on the diagonal there is a rival's
+     * Bishop or Queen, and between them and the King are no other pieces.
+     *  2) the King would be in check from an opponent's Pawn (the King simulates a move on Pawn's diagonal,
+     *  no further than one square in front of the Pawn's moving direction).
+     *  3) the desired movement of the King is less than one square close to the rival King.
+     * Return: true if King will be in check, false otherwise.
+     */
     public boolean isUnderCheck(Position position){
         tempChecked.clear();
         int tempX = position.getX()-1;
@@ -280,6 +308,16 @@ public class King implements Piece{
         return !tempChecked.isEmpty();
     }
 
+    /**
+     * This method checks if the King can castle, meaning all the following rules have to be applied (true):
+     *  1) the King is not currently in check;
+     *  2) the King was never moved before ('wasMoved' has to be 'false');
+     *  3) the Rook with which the player wants to castle was never moved (its 'wasMoved' variable has to be false);
+     *  4) there are no other pieces between the King and the Rook;
+     *  5) the destination position for the King is 2 squares left or right (depending on the wanted direction of the castle);
+     *  6) the King does not pass through or finish on a square that is threatened by an enemy piece.
+     * Return: true if castle can be performed, false otherwise.
+     */
     public boolean canCastle(Position toPosition) {
         if (!Piece.super.isValid(toPosition)){
             return false;

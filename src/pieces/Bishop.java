@@ -15,6 +15,13 @@ public class Bishop implements Piece{
         this.position = position;
     }
 
+    /**
+     * This method checks if the movement chosen by the player is valid:
+     *  1) the movement is along the diagonal;
+     *  2) there are no pieces between its current position and the destination position;
+     *  3) the destination position is free or occupied by an opponent's piece.
+     * Return: true if the move can be performed, false otherwise;
+     */
     @Override
     public boolean checkIfCanMove(Position toPosition) {
         if(Piece.super.isValid(toPosition)){
@@ -22,7 +29,8 @@ public class Bishop implements Piece{
             int fromY = this.position.getY();
             int toX = toPosition.getX();
             int toY = toPosition.getY();
-            if (Board.getPiece(toPosition)!=null && Board.getPiece(toPosition).getColour() == Board.getPiece(this.position).getColour()){
+            if (Board.getPiece(toPosition)!=null &&
+                    Board.getPiece(toPosition).getColour() == Board.getPiece(this.position).getColour()){
                 return false;
             } else if (Math.abs(fromX - toX) != Math.abs(fromY - toY)){
                 return false;
