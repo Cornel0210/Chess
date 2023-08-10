@@ -8,11 +8,17 @@ import java.util.*;
 
 public class Board {
     private static Piece[][] chessBoard;
-    private List<Piece> whites = new LinkedList<>();
-    private List<Piece> blacks = new LinkedList<>();
-    private King blackKing;
-    private King whiteKing;
+    private List<Piece> whites = new LinkedList<>(); //used to keep track for white pieces removed
+    private List<Piece> blacks = new LinkedList<>(); //used to keep track for black pieces removed
+    private King blackKing; //used for knowing the current position of the King
+    private King whiteKing; //used for knowing the current position of the King
     private boolean end = false;
+
+    /**
+     * This constructor is used to create a new chess board and to set a new reference for each King on the board.
+     * The two references are useful because the program doesn't have to search for Kings' positions at each verification
+     * for a possible check.
+     */
     public Board() {
         chessBoard = new Piece[8][8];
         loadBoard();
@@ -20,6 +26,9 @@ public class Board {
         whiteKing = (King)getPiece(new Position(7,4));
     }
 
+    /**
+     * This constructor is used for JUNIT to load a predefined board for tests.
+     */
     public Board(Piece[][] chessBoard) {
         Board.chessBoard = chessBoard;
         for (int i = 0; i < chessBoard.length; i++) {
@@ -35,6 +44,9 @@ public class Board {
         }
     }
 
+    /**
+     * This method is used to initialize the chess board with pieces in standard positions for a new game.
+     */
     private void loadBoard(){
         for (int i = 0; i < chessBoard.length; i++) {
             chessBoard[1][i] = new Pawn(Colour.BLACK, new Position(1, i));
@@ -61,6 +73,21 @@ public class Board {
         chessBoard[chessBoard.length-1][4] = new King(Colour.WHITE, new Position(chessBoard.length-1,4));
     }
 
+    /**
+     * This method is used to perform the move that a player wants. It receives the initial position (oldPosition), the
+     * destination position (newPosition) and the colour for the player that has to move a piece.
+     * The method checks if:
+     *  1) the player is allowed to move the piece (eq.: when it is white's turn to move, the player can only move white pieces);
+     *  2) at the initial position exists a piece that can be moved;
+     *  3) the move doesn't get the current player's King in check;
+     *  4) the move can be actually performed (using 'checkIfCanMove' overrode method);
+     *  5) the move brings the opponent's King in check (using 'isEnemyChecked' method);
+     *  6) the move gets check mate to the opponent's King (using 'isCheckMate' method);
+     *  7) the game will be a draw if the current move will be performed;
+     *  8) the moved piece is a Pawn, and it can shape-shift (using 'shapeShift' method);
+     *  9) the chosen piece is the King and the player wants to castle (using 'castle' method);
+     *  Return: true if the move was performed, false otherwise.
+     */
     public boolean movePiece(Position oldPosition, Position newPosition, Colour playersColour){
         Piece piece = getPiece(oldPosition);
         if (piece!=null && piece.getColour() != playersColour){
@@ -212,16 +239,23 @@ public class Board {
 
             return true;
         } else if (piece instanceof King){
-            return checkForCastling((King)piece, oldPosition, newPosition);
+            return castle((King)piece, oldPosition, newPosition);
         }
         return false;
     }
-    private boolean checkForCastling(King king, Position oldPosition, Position newPosition){
+
+    /**
+     * It checks if the King is moved two squares to the right or to the left side.
+     * This method performs the moves for a castle if the result of 'canCastle' method is 'true'.
+     * Return: true if the castle was performed, false otherwise.
+     */
+    private boolean castle(King king, Position oldPosition, Position newPosition){
         if (Math.abs(newPosition.getY() - oldPosition.getY())==2){
             if (king.canCastle(newPosition)){
                 chessBoard[oldPosition.getX()][oldPosition.getY()] = null;
                 chessBoard[newPosition.getX()][newPosition.getY()] = king;
                 king.setPosition(newPosition);
+                king.setWasMoved(true);
                 if (newPosition.getY()>oldPosition.getY()){
                     Rook rook = (Rook)getPiece(new Position(newPosition.getX(), newPosition.getY()+1));
                     chessBoard[newPosition.getX()][newPosition.getY()-1] = rook;
@@ -238,6 +272,10 @@ public class Board {
         return false;
     }
 
+    /**
+     * This method checks if the piece that was moved gets the rival's King in check.
+     * Return: true if the opponent's King will be in check, false otherwise.
+     */
     private boolean isEnemyChecked(Piece piece){
         if (piece.getColour()==Colour.BLACK){ //the move that you want to perform gets enemy in chess=> allowed
             if (whiteKing.isUnderCheck()){
@@ -255,6 +293,17 @@ public class Board {
         return false;
     }
 
+    /**
+     * This method is used to check if a player has won.
+     * It checks if the King inserted as a parameter can get out of check:
+     *  - if the King is in check from more than one piece, the only possibility is to check if the King itself can be
+     *  moved into a place where it is no longer threatened by an enemy piece.
+     *  - if the King is in check from one piece, this method checks:
+     *      1) if there is a piece that can be moved on the path between the King and the piece which threatens it;
+     *      2) if there is a piece that can take out the piece that attacks the King;
+     *      3) if the King can be moved in a place where it is no longer in check.
+     * Return: true if the opponent's King can't get out of check, false otherwise.
+     */
     private boolean isCheckMate(King king){
         Colour colour = king.getColour();
         int x = king.getPosition().getX();
@@ -353,6 +402,11 @@ public class Board {
         return false;
     }
 
+    /**
+     * When the King is in check, this method is used to see if there is a piece that can be moved on any square on
+     * the path between the King and the enemy piece that threatens the King (including the enemy piece's position).
+     * Return: true if it has found a piece that can be moved to the inserted position.
+     */
     private boolean canDefend(Colour colour, Position position){
         int tempX = position.getX()-1;
         int tempY = position.getY();
@@ -595,14 +649,22 @@ public class Board {
         return (position.getX()>=0 && position.getX()<=7 &&
                 position.getY()>=0 && position.getY()<=7);
     }
+
+    /**
+     * This method checks if a Pawn has reached the last row on the opposite side, so the piece can shape-shift into any
+     * other piece (except the King and other Pawn).
+     * Also, the method checks if the movement of the Pawn on the last row gets the King in check from any enemy piece.
+     * If the Pawn can be moved to the last row, it will be changed with a new piece that will be chosen by the player.
+     * Return: true if the Pawn was shape-shifted into other piece, false otherwise.
+     */
     private boolean shapeShift(Piece piece, King king, Position oldPosition, Position newPosition){
         chessBoard[oldPosition.getX()][oldPosition.getY()] = null;
         Piece oldPiece = piece;
         List<String> possibilities = Arrays.asList("queen", "bishop", "rook", "knight");
-        System.out.println("Choose a piece to replace the pawn");
+        System.out.println("Choose a piece to replace the pawn:");
         String input = Input.getInstance().getPiece();
         while (!possibilities.contains(input.trim().toLowerCase())){
-            System.out.println("Wrong input");
+            System.out.println("Wrong input!");
             input = Input.getInstance().getPiece();
         }
         switch (input.trim().toLowerCase()){

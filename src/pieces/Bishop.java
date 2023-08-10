@@ -5,8 +5,8 @@ import helper.Colour;
 import helper.Position;
 
 public class Bishop implements Piece{
-    private Colour colour;
-    private String name;
+    private final Colour colour;
+    private final String name;
     private Position position;
 
     public Bishop(Colour colour, Position position) {

@@ -5,8 +5,8 @@ import helper.Colour;
 import helper.Position;
 
 public class Pawn implements Piece{
-    private Colour colour;
-    private String name;
+    private final Colour colour;
+    private final String name;
     private Position position;
 
     public Pawn(Colour colour, Position position) {

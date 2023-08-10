@@ -4,16 +4,19 @@ import helper.Colour;
 import helper.Input;
 import helper.Position;
 
-import java.util.InputMismatchException;
-
 public class HumanPlayer extends Player{
 
     public HumanPlayer(Colour colour) {
         super(colour);
     }
 
+    /**
+     * This method checks if the input received from 'Input' class respects the allowed format ('x-y', where 'x' and 'y'
+     * are two integers between [0,7], separated by a dash).
+     * Return: a new Position (used as initial or final position for a movement).
+     */
     @Override
-    public Position move() {
+    public Position getPositionForMove() {
         int x;
         int y;
         String input = Input.getInstance().getPosition();

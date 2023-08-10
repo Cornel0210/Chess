@@ -36,12 +36,12 @@ public class Game {
             } else {
                 System.out.println("Red`s turn to move.");
             }
-            Position from = current.move();
-            Position to = current.move();
+            Position from = current.getPositionForMove();
+            Position to = current.getPositionForMove();
             while (!board.movePiece(from, to, current.getColour())){
                 System.out.println("You cannot perform that move, try again!");
-                from = current.move();
-                to = current.move();
+                from = current.getPositionForMove();
+                to = current.getPositionForMove();
             }
 
             this.update(from, to, current.getColour());

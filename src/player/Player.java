@@ -14,6 +14,6 @@ public abstract class Player {
         return colour;
     }
 
-    public abstract Position move();
+    public abstract Position getPositionForMove();
 
 }

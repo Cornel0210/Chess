@@ -1,8 +1,8 @@
 package helper;
 
 public class Position {
-    private int x;
-    private int y;
+    private final int x;
+    private final int y;
 
     //x = lines
     //y = columns
@@ -15,16 +15,8 @@ public class Position {
         return x;
     }
 
-    public void setX(int x) {
-        this.x = x;
-    }
-
     public int getY() {
         return y;
-    }
-
-    public void setY(int y) {
-        this.y = y;
     }
 
     @Override

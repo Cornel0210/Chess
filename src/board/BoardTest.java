@@ -2,10 +2,8 @@ package board;
 
 import helper.Colour;
 import helper.Position;
-import org.junit.Test;
 import pieces.*;
 
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
